@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Option C — AI tạo sẵn, bạn duyệt</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="page-shell">
+  <div class="topbar">
+    <div class="topbar-brand"><span class="dot"></span> Vlearn</div>
+    <div class="topbar-lesson">Bài 9 · Thiết kế trải nghiệm Human–AI</div>
+    <div class="stepper">
+      <div class="step done"><span class="num">✓</span> Ngữ cảnh</div>
+      <div class="step-line done"></div>
+      <div class="step active"><span class="num">2</span> Tạo ghi chú</div>
+      <div class="step-line"></div>
+      <div class="step"><span class="num">3</span> Kết quả</div>
+    </div>
+  </div>
+<div class="wrap">
+  <div class="crumbs" style="margin-top:20px;"><a href="index.html">
+    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+    Common context</a> / Option C</div>
+  <div class="eyebrow">Critical interaction — Option C</div>
+  <h1>AI đã tạo sẵn bản nháp</h1>
+  <p class="sub">AI đang tạo bản nháp từ ghi chú của bạn — hãy xem lại trước khi lưu. Phần tô vàng là chỗ AI không chắc (di chuột để xem vì sao).</p>
+
+  <div class="card" id="draft-card">
+    <div class="card-title">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>
+      Bản nháp ghi chú <span id="version-tag" style="color:var(--text-dim); font-weight:400;">· bản 1</span></div>
+    <div class="note-draft" id="draft-view"></div>
+    <textarea class="edit-area" id="draft-edit" style="display:none;"></textarea>
+  </div>
+
+  <div class="btn-row">
+    <button id="edit-btn"></button>
+    <button id="regen-btn">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+      Tạo lại bản nháp</button>
+    <button class="primary" id="confirm-btn">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      Xác nhận & Lưu</button>
+    <a class="btn ghost" href="index.html" style="text-decoration:none;">Huỷ, quay lại context</a>
+  </div>
+</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const ICON_EDIT_BTN = '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>';
+const ICON_SAVE_BTN = '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+document.getElementById('edit-btn').innerHTML = ICON_EDIT_BTN + 'Sửa nội dung';
+const drafts = [
+  {
+    version: 1,
+    html: 'Bài học tập trung vào cách chia agency giữa user và AI. <span class="flag" data-flag="AI không chắc — điểm &quot;Chưa hiểu&quot; gốc không nói rõ ranh giới cụ thể, đây là suy luận AI tự thêm.">AI nên Act, Ask hay Don\'t Act tuỳ mức hậu quả nếu sai — nhưng ranh giới cụ thể giữa Ask và Act cho từng tình huống vẫn chưa rõ.</span> Agency của user nên tỉ lệ nghịch với độ tự tin của AI. <span class="flag" data-flag="AI không chắc — chưa có ví dụ cụ thể trong ghi chú gốc về cách thể hiện uncertainty, AI đang suy luận chung.">Cách thể hiện uncertainty sao cho không làm user hoang mang thì chưa rõ.</span> Recovery path cần rõ ràng trước khi AI được tự động hoá cao.\n\nCâu hỏi còn mở: nếu AI flag nhầm chỗ đúng, user có bực không?',
+  },
+  {
+    version: 2,
+    html: 'Chủ đề chính: agency nên chia giữa user và AI theo mức hậu quả nếu sai — Act khi rủi ro thấp, Ask khi rủi ro vừa, Don\'t Act khi rủi ro cao. <span class="flag" data-flag="AI không chắc — đây là một cách chia cụ thể hoá thêm, ghi chú gốc không nêu ngưỡng rủi ro rõ ràng.">Ngưỡng rủi ro cụ thể để phân biệt ba mức này vẫn chưa được xác nhận.</span> Agency của user nên tỉ lệ nghịch với độ tự tin của AI, và <span class="flag" data-flag="AI không chắc — nội dung &quot;Chưa hiểu&quot; gốc chỉ nói &quot;chưa rõ cách thể hiện&quot;, chưa có giải pháp cụ thể để AI suy ra.">cách thể hiện điều đó với user vẫn là câu hỏi mở.</span> Trước khi tự động hoá cao, recovery path phải rõ ràng.\n\nCâu hỏi còn mở: nếu AI flag nhầm chỗ đúng, user có bực không?',
+  },
+];
+
+let current = 0;
+let edited = false;
+let customText = null;
+
+function renderDraft() {
+  document.getElementById('version-tag').textContent = '· bản ' + drafts[current].version + (edited ? ' (đã sửa tay)' : '');
+  const view = document.getElementById('draft-view');
+  if (edited && customText !== null) {
+    view.textContent = customText;
+  } else {
+    view.innerHTML = drafts[current].html;
+  }
+}
+
+document.getElementById('edit-btn').addEventListener('click', () => {
+  const view = document.getElementById('draft-view');
+  const editArea = document.getElementById('draft-edit');
+  const isEditing = editArea.style.display !== 'none';
+  if (!isEditing) {
+    editArea.value = customText !== null ? customText : view.innerText;
+    view.style.display = 'none';
+    editArea.style.display = 'block';
+    document.getElementById('edit-btn').innerHTML = ICON_SAVE_BTN + 'Lưu chỉnh sửa';
+  } else {
+    customText = editArea.value;
+    edited = true;
+    view.style.display = 'block';
+    editArea.style.display = 'none';
+    document.getElementById('edit-btn').innerHTML = ICON_EDIT_BTN + 'Sửa nội dung';
+    renderDraft();
+    toast('Đã lưu chỉnh sửa của bạn');
+  }
+});
+
+document.getElementById('regen-btn').addEventListener('click', () => {
+  current = (current + 1) % drafts.length;
+  edited = false;
+  customText = null;
+  document.getElementById('draft-edit').style.display = 'none';
+  document.getElementById('draft-view').style.display = 'block';
+  document.getElementById('edit-btn').innerHTML = ICON_EDIT_BTN + 'Sửa nội dung';
+  renderDraft();
+  toast('AI đã tạo lại bản nháp');
+});
+
+document.getElementById('confirm-btn').addEventListener('click', () => {
+  const finalText = edited && customText !== null ? customText : document.getElementById('draft-view').innerText;
+  sessionStorage.setItem('optionC_final', finalText);
+  sessionStorage.setItem('optionC_edited', edited ? 'yes' : 'no');
+  window.location.href = 'result-c.html';
+});
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(window._t);
+  window._t = setTimeout(() => t.classList.remove('show'), 1800);
+}
+
+renderDraft();
+</script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kết quả — Option B</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="page-shell">
+  <div class="topbar">
+    <div class="topbar-brand"><span class="dot"></span> Vlearn</div>
+    <div class="topbar-lesson">Bài 9 · Thiết kế trải nghiệm Human–AI</div>
+    <div class="stepper">
+      <div class="step done"><span class="num">✓</span> Ngữ cảnh</div>
+      <div class="step-line done"></div>
+      <div class="step done"><span class="num">✓</span> Tạo ghi chú</div>
+      <div class="step-line done"></div>
+      <div class="step active"><span class="num">3</span> Kết quả</div>
+    </div>
+  </div>
+<div class="wrap">
+  <div class="crumbs" style="margin-top:20px;"><a href="index.html">
+    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+    Common context</a> / Option B / Kết quả</div>
+  <div class="eyebrow">Result / User decision — Option B</div>
+  <div class="check-pop"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+  <div class="result-banner">Đã lưu ghi chú</div>
+  <h1>Ghi chú của bạn</h1>
+  <p class="sub" id="empty-note" style="display:none;">Bạn đã bỏ hết gợi ý của AI và không thêm mục tự viết nào — ghi chú hiện đang trống. Đây là lựa chọn hợp lệ: quay lại sửa nếu muốn.</p>
+
+  <div id="kept-list"></div>
+
+  <div class="btn-row">
+    <button class="ghost" onclick="window.location.href='option-b.html'">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      Sửa lại</button>
+    <button class="primary" onclick="window.location.href='index.html'">Quay lại context ban đầu</button>
+  </div>
+</div>
+</div>
+
+<script>
+const kept = JSON.parse(sessionStorage.getItem('optionB_kept') || '[]');
+const manual = JSON.parse(sessionStorage.getItem('optionB_manual') || '[]');
+const list = document.getElementById('kept-list');
+
+if (kept.length === 0 && manual.length === 0) {
+  document.getElementById('empty-note').style.display = 'block';
+}
+
+kept.forEach(k => {
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.innerHTML = `<div class="card-title">${k.title}${k.source === 'edited' ? ' · bạn đã chỉnh sửa' : ' · bạn đã nhận nguyên gợi ý'}</div><div style="font-size:14px;">${k.text}</div>`;
+  list.appendChild(card);
+});
+
+if (manual.length > 0) {
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.innerHTML = `<div class="card-title">Bạn tự viết thêm</div>` + manual.map(m => `<div style="font-size:14px; margin-bottom:6px;">${m}</div>`).join('');
+  list.appendChild(card);
+}
+</script>
+</body>
+</html>

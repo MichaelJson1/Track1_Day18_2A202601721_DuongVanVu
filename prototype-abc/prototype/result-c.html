@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kết quả — Option C</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="page-shell">
+  <div class="topbar">
+    <div class="topbar-brand"><span class="dot"></span> Vlearn</div>
+    <div class="topbar-lesson">Bài 9 · Thiết kế trải nghiệm Human–AI</div>
+    <div class="stepper">
+      <div class="step done"><span class="num">✓</span> Ngữ cảnh</div>
+      <div class="step-line done"></div>
+      <div class="step done"><span class="num">✓</span> Tạo ghi chú</div>
+      <div class="step-line done"></div>
+      <div class="step active"><span class="num">3</span> Kết quả</div>
+    </div>
+  </div>
+<div class="wrap">
+  <div class="crumbs" style="margin-top:20px;"><a href="index.html">
+    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+    Common context</a> / Option C / Kết quả</div>
+  <div class="eyebrow">Result / User decision — Option C</div>
+  <div class="check-pop"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+  <div class="result-banner">Đã lưu ghi chú</div>
+  <h1>Ghi chú của bạn</h1>
+  <p class="sub" id="edit-note" style="display:none;">Bạn đã chỉnh sửa bản nháp của AI trước khi lưu.</p>
+
+  <div class="card">
+    <div class="card-title">Bản đã lưu</div>
+    <div class="note-draft" id="final-view"></div>
+  </div>
+
+  <div class="btn-row">
+    <button class="ghost" onclick="window.location.href='option-c.html'">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      Sửa lại</button>
+    <button class="primary" onclick="window.location.href='index.html'">Quay lại context ban đầu</button>
+  </div>
+</div>
+</div>
+
+<script>
+const finalText = sessionStorage.getItem('optionC_final') || '';
+const wasEdited = sessionStorage.getItem('optionC_edited') === 'yes';
+document.getElementById('final-view').textContent = finalText;
+if (wasEdited) document.getElementById('edit-note').style.display = 'block';
+</script>
+</body>
+</html>
