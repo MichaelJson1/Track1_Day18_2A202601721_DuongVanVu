@@ -61,23 +61,25 @@ Hai cách giải thích cạnh tranh cho cùng một hành vi quan sát được
 
 ## 2. Ba Practice Notes (một note / thành viên)
 
-| Thành viên      | Practice Note | Nội dung |
-| ----------------- | ------------- | --------- |
-| Cao Nhật Minh    |               |           |
-| Dương Văn Vũ  |               |           |
-| Phạm Khánh Linh |               |           |
+| Thành viên      | Câu hỏi mở được câu chuyện thật                                                                                                                                                                              | Chỗ mình đã hỏng                                                                                                                                                                        | Guide đã sửa ở đâu, vì sao                                                                                                                                                                                                                                                                             |
+| ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Cao Nhật Minh    | "Lý do vì sao bạn lại mở lại ít?" — mở ra lý do thật (một buổi có nhiều thắc mắc) và workaround thật đang dùng (đưa notepad vào ChatGPT để tổng hợp)                                      | Câu dẫn dắt "Thì cái cách này thì cũng khá là hiệu quả đúng không?" khiến người trả lời chỉ gật theo, không kể tiếp                                                | Story opener đổi từ hỏi thói quen chung sang hỏi "lần gần nhất..."; recruitment check thêm vế 2 hỏi riêng lần gần nhất phải dùng lại nội dung cũ — vì buổi luyện cho thấy hỏi thói quen chung chỉ ra câu trả lời dạng quy trình, không neo vào một tình huống cụ thể |
+| Dương Văn Vũ  | "Sau khi kết thúc các bài học đấy thì anh sẽ làm gì với các highlight và ghi chú...?" — ra được hành vi chung (ghi chú, tìm thêm tài liệu ngoài khi slide chưa rõ)                        | Hỏi quá chung: "Gần đây anh có sử dụng Vlearn để đọc slide, đánh dấu ghi chú... không?" → chỉ nhận được "Có, mình có", không có tình huống hay bước cụ thể | Thêm story opener "lần gần nhất…"; thêm phản xạ Anchor khi câu trả lời chung chung; thêm Big 3#3 hỏi thời gian/chi phí/hậu quả — vì buổi luyện chỉ thu được mô tả thói quen, chưa có evidence về một sự kiện thật                                                          |
+| Phạm Khánh Linh | "Về việc, lần gần nhất mà bạn phải, kiểu phải tìm lại bài học cũ để mà học lại" — user nêu được mốc thời gian tương đối cụ thể ("khoảng tuần trước") và một tình huống thật | Bỏ lỡ tín hiệu: khi user trả lời chung chung "Thường là mình sẽ vào slide rồi Ctrl+F...", không Anchor lại về lần cụ thể mà hỏi thẳng sang mức độ tốn công        | Lỗi bỏ qua recruitment check và lỗi không Anchor câu trả lời chung chung đã được ghi nhận vào guide chung (bắt buộc hỏi recruitment check trước lời mở đầu; luôn hỏi lại "lần gần nhất là khi nào?" khi câu trả lời mơ hồ).                                              |
 
 ---
 
 ## 3. Solution Parking Lot (tối thiểu 5 hướng)
 
-| # | Hướng giải quyết | Có dùng AI? | Ghi chú |
-| - | -------------------- | ------------- | -------- |
-| 1 |                      |               |          |
-| 2 |                      |               |          |
-| 3 |                      |               |          |
-| 4 |                      |               |          |
-| 5 |                      |               |          |
+Brainstorm **ít nhất năm hướng**, trong đó **ít nhất một hướng không sử dụng AI**.
+
+| # | Hướng giải quyết có thể có                                                                               | AI / Không sử dụng AI |
+| - | --------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| 1 | Tự động tổng hợp highlight, ghi chú và câu hỏi thành bản ghi chú theo chủ đề sau bài học       | AI                       |
+| 2 | Gợi ý các ý chính, phần chưa hiểu và câu hỏi cần xem lại để học viên chọn đưa vào ghi chú | AI                       |
+| 3 | Tạo flashcard hoặc câu hỏi ôn tập từ nội dung học và ghi chú cá nhân                               | AI                       |
+| 4 | Cung cấp mẫu ghi chú có sẵn để học viên tự kéo thả, phân nhóm và hoàn thiện sau bài học      | Không sử dụng AI      |
+| 5 | Lưu highlight và ghi chú theo từng bài, kèm danh sách nhắc xem lại theo thời gian                     | Không sử dụng AI      |
 
 ---
 
