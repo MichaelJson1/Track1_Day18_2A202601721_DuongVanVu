@@ -7,10 +7,10 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="page-shell">
-  <div class="topbar">
-    <div class="topbar-brand"><span class="dot"></span> Vlearn</div>
-    <div class="topbar-lesson">Bài 9 · Thiết kế trải nghiệm Human–AI</div>
+<header class="app-header">
+  <div class="header-inner container">
+    <div class="brand"><span class="dot"></span> Vlearn</div>
+    <div class="lesson-name">Bài 9 · Thiết kế trải nghiệm Human–AI</div>
     <div class="stepper">
       <div class="step done"><span class="num">✓</span> Ngữ cảnh</div>
       <div class="step-line done"></div>
@@ -19,8 +19,9 @@
       <div class="step active"><span class="num">3</span> Kết quả</div>
     </div>
   </div>
-<div class="wrap">
-  <div class="crumbs" style="margin-top:20px;"><a href="index.html">
+</header>
+<main class="container page-content reading-col">
+  <div class="crumbs"><a href="index.html">
     <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
     Common context</a> / Option B / Kết quả</div>
   <div class="eyebrow">Result / User decision — Option B</div>
@@ -37,8 +38,7 @@
       Sửa lại</button>
     <button class="primary" onclick="window.location.href='index.html'">Quay lại context ban đầu</button>
   </div>
-</div>
-</div>
+</main>
 
 <script>
 const kept = JSON.parse(sessionStorage.getItem('optionB_kept') || '[]');

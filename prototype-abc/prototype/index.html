@@ -7,10 +7,10 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="page-shell">
-  <div class="topbar">
-    <div class="topbar-brand"><span class="dot"></span> Vlearn</div>
-    <div class="topbar-lesson">Bài 9 · Thiết kế trải nghiệm Human–AI</div>
+<header class="app-header">
+  <div class="header-inner container">
+    <div class="brand"><span class="dot"></span> Vlearn</div>
+    <div class="lesson-name">Bài 9 · Thiết kế trải nghiệm Human–AI</div>
     <div class="stepper">
       <div class="step active"><span class="num">1</span> Ngữ cảnh</div>
       <div class="step-line"></div>
@@ -19,41 +19,44 @@
       <div class="step"><span class="num">3</span> Kết quả</div>
     </div>
   </div>
-<div class="wrap">
-  <div class="eyebrow" style="margin-top:20px;">Common context</div>
+</header>
+<main class="container page-content">
+  <div class="eyebrow">Common context</div>
   <h1>Bạn vừa hoàn thành bài học</h1>
   <p class="sub">Hoàn thành lúc 21:40</p>
 
-  <div class="card">
-    <div class="card-title">Đã lưu trong lúc học</div>
-    <div class="chip-row" id="fixture-chips">
-      <span class="chip highlight">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
-        AI nên Act, Ask hay Don't Act phụ thuộc vào mức hậu quả nếu sai</span>
-      <span class="chip highlight">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
-        Agency của user nên tỉ lệ nghịch với độ tự tin của AI</span>
-      <span class="chip highlight">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
-        Recovery path phải rõ trước khi cho AI tự động hoá cao</span>
-      <span class="chip unclear">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        Chưa hiểu — khi nào nên chọn Ask thay vì Act</span>
-      <span class="chip unclear">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        Chưa hiểu — cách thể hiện uncertainty mà không làm user hoang mang</span>
-      <span class="chip question">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-        Câu hỏi — nếu AI flag nhầm chỗ đúng, user có bực không?</span>
+  <div class="split-2">
+    <div class="card">
+      <div class="card-title">Đã lưu trong lúc học</div>
+      <div class="chip-row" id="fixture-chips">
+        <span class="chip highlight">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+          AI nên Act, Ask hay Don't Act phụ thuộc vào mức hậu quả nếu sai</span>
+        <span class="chip highlight">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+          Agency của user nên tỉ lệ nghịch với độ tự tin của AI</span>
+        <span class="chip highlight">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+          Recovery path phải rõ trước khi cho AI tự động hoá cao</span>
+        <span class="chip unclear">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Chưa hiểu — khi nào nên chọn Ask thay vì Act</span>
+        <span class="chip unclear">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Chưa hiểu — cách thể hiện uncertainty mà không làm user hoang mang</span>
+        <span class="chip question">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+          Câu hỏi — nếu AI flag nhầm chỗ đúng, user có bực không?</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Việc bạn cần làm</div>
+      <p style="margin:0; font-size:14px;">Bạn muốn có một bản ghi chú có cấu trúc từ những gì vừa lưu ở trên, để lát nữa dùng lại khi ôn tập — không phải mở lại toàn bộ bài học.</p>
     </div>
   </div>
 
-  <div class="card">
-    <div class="card-title">Việc bạn cần làm</div>
-    <p style="margin:0; font-size:14px;">Bạn muốn có một bản ghi chú có cấu trúc từ những gì vừa lưu ở trên, để lát nữa dùng lại khi ôn tập — không phải mở lại toàn bộ bài học.</p>
-  </div>
-
-  <h2 style="margin-top:28px;">Chọn một cách tạo ghi chú</h2>
+  <h2 style="margin-top:32px;">Chọn một cách tạo ghi chú</h2>
   <p class="sub" style="margin-bottom:12px;">Cả ba đều bắt đầu từ đúng nội dung ở trên. Chỉ bước tạo ghi chú là khác.</p>
 
   <div class="option-grid">
@@ -82,7 +85,6 @@
       <div class="option-desc">AI viết luôn một bản nháp hoàn chỉnh, tự flag chỗ không chắc. Bạn xem và sửa.</div>
     </a>
   </div>
-</div>
-</div>
+</main>
 </body>
 </html>

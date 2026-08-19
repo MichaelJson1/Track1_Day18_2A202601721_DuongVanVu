@@ -7,10 +7,10 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="page-shell">
-  <div class="topbar">
-    <div class="topbar-brand"><span class="dot"></span> Vlearn</div>
-    <div class="topbar-lesson">Bài 9 · Thiết kế trải nghiệm Human–AI</div>
+<header class="app-header">
+  <div class="header-inner container">
+    <div class="brand"><span class="dot"></span> Vlearn</div>
+    <div class="lesson-name">Bài 9 · Thiết kế trải nghiệm Human–AI</div>
     <div class="stepper">
       <div class="step done"><span class="num">✓</span> Ngữ cảnh</div>
       <div class="step-line done"></div>
@@ -19,8 +19,9 @@
       <div class="step"><span class="num">3</span> Kết quả</div>
     </div>
   </div>
-<div class="wrap">
-  <div class="crumbs" style="margin-top:20px;"><a href="index.html">
+</header>
+<main class="container page-content reading-col">
+  <div class="crumbs"><a href="index.html">
     <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
     Common context</a> / Option C</div>
   <div class="eyebrow">Critical interaction — Option C</div>
@@ -31,7 +32,18 @@
     <div class="card-title">
       <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>
       Bản nháp ghi chú <span id="version-tag" style="color:var(--text-dim); font-weight:400;">· bản 1</span></div>
-    <div class="note-draft" id="draft-view"></div>
+    <div id="skeleton-view">
+      <div class="generating-badge">
+        <span class="generating-dot"></span><span class="generating-dot"></span><span class="generating-dot"></span>
+        AI đang soạn bản nháp...
+      </div>
+      <div class="skeleton-line w-90"></div>
+      <div class="skeleton-line w-80"></div>
+      <div class="skeleton-line w-90"></div>
+      <div class="skeleton-line w-60"></div>
+      <div class="skeleton-line w-40"></div>
+    </div>
+    <div class="note-draft" id="draft-view" style="display:none;"></div>
     <textarea class="edit-area" id="draft-edit" style="display:none;"></textarea>
   </div>
 
@@ -45,8 +57,7 @@
       Xác nhận & Lưu</button>
     <a class="btn ghost" href="index.html" style="text-decoration:none;">Huỷ, quay lại context</a>
   </div>
-</div>
-</div>
+</main>
 
 <div class="toast" id="toast"></div>
 
@@ -79,6 +90,34 @@ function renderDraft() {
   }
 }
 
+function setActionsDisabled(disabled) {
+  ['edit-btn', 'regen-btn', 'confirm-btn'].forEach(id => document.getElementById(id).disabled = disabled);
+}
+
+function showSkeleton(label) {
+  const skeleton = document.getElementById('skeleton-view');
+  const view = document.getElementById('draft-view');
+  skeleton.querySelector('.generating-badge').lastChild.textContent = label;
+  skeleton.style.display = 'block';
+  view.style.display = 'none';
+  setActionsDisabled(true);
+}
+
+function hideSkeleton() {
+  const skeleton = document.getElementById('skeleton-view');
+  const view = document.getElementById('draft-view');
+  skeleton.style.display = 'none';
+  view.style.display = 'block';
+  view.classList.add('fading');
+  renderDraft();
+  requestAnimationFrame(() => view.classList.remove('fading'));
+  setActionsDisabled(false);
+}
+
+// Simulate the AI generating the very first draft after the tester lands on this screen.
+showSkeleton(' AI đang soạn bản nháp...');
+setTimeout(hideSkeleton, 650);
+
 document.getElementById('edit-btn').addEventListener('click', () => {
   const view = document.getElementById('draft-view');
   const editArea = document.getElementById('draft-edit');
@@ -104,13 +143,21 @@ document.getElementById('regen-btn').addEventListener('click', () => {
   edited = false;
   customText = null;
   document.getElementById('draft-edit').style.display = 'none';
-  document.getElementById('draft-view').style.display = 'block';
   document.getElementById('edit-btn').innerHTML = ICON_EDIT_BTN + 'Sửa nội dung';
-  renderDraft();
-  toast('AI đã tạo lại bản nháp');
+  showSkeleton(' AI đang tạo lại bản nháp...');
+  setTimeout(() => {
+    hideSkeleton();
+    toast('AI đã tạo lại bản nháp — bản cũ không được giữ lại');
+  }, 500);
 });
 
 document.getElementById('confirm-btn').addEventListener('click', () => {
+  const editArea = document.getElementById('draft-edit');
+  if (editArea.style.display !== 'none') {
+    // Tester is mid-edit and hit confirm directly — autosave instead of losing their edit.
+    customText = editArea.value;
+    edited = true;
+  }
   const finalText = edited && customText !== null ? customText : document.getElementById('draft-view').innerText;
   sessionStorage.setItem('optionC_final', finalText);
   sessionStorage.setItem('optionC_edited', edited ? 'yes' : 'no');
@@ -125,7 +172,6 @@ function toast(msg) {
   window._t = setTimeout(() => t.classList.remove('show'), 1800);
 }
 
-renderDraft();
 </script>
 </body>
 </html>

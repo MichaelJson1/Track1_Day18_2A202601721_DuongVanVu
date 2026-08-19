@@ -7,10 +7,10 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="page-shell">
-  <div class="topbar">
-    <div class="topbar-brand"><span class="dot"></span> Vlearn</div>
-    <div class="topbar-lesson">Bài 9 · Thiết kế trải nghiệm Human–AI</div>
+<header class="app-header">
+  <div class="header-inner container">
+    <div class="brand"><span class="dot"></span> Vlearn</div>
+    <div class="lesson-name">Bài 9 · Thiết kế trải nghiệm Human–AI</div>
     <div class="stepper">
       <div class="step done"><span class="num">✓</span> Ngữ cảnh</div>
       <div class="step-line done"></div>
@@ -19,24 +19,27 @@
       <div class="step"><span class="num">3</span> Kết quả</div>
     </div>
   </div>
-<div class="wrap">
-  <div class="crumbs" style="margin-top:20px;"><a href="index.html">
+</header>
+<main class="container page-content">
+  <div class="crumbs"><a href="index.html">
     <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
     Common context</a> / Option A</div>
   <div class="eyebrow">Critical interaction — Option A</div>
   <h1>Tự sắp xếp vào mẫu ghi chú</h1>
-  <p class="sub">Chạm một mục bên dưới, rồi chạm vào ô bạn muốn đặt nó vào. AI không tham gia bước này.</p>
+  <p class="sub">Kéo một mục thả vào ô bên phải — hoặc chạm để chọn rồi chạm ô để đặt. AI không tham gia bước này.</p>
 
-  <div class="card">
-    <div class="card-title">Các mục đã lưu trong lúc học — chạm để chọn</div>
-    <div class="chip-row" id="pool"></div>
-  </div>
+  <div class="split-2">
+    <div class="card">
+      <div class="card-title">Các mục đã lưu trong lúc học — chạm để chọn</div>
+      <div class="chip-row" id="pool"></div>
+    </div>
 
-  <div class="card">
-    <div class="card-title">Mẫu ghi chú của bạn — chạm ô để đặt mục đã chọn vào</div>
-    <div class="bucket" data-bucket="main"><div class="bucket-label">Ý chính</div><div class="bucket-body"><span class="bucket-empty">Chưa có mục nào</span></div></div>
-    <div class="bucket" data-bucket="review"><div class="bucket-label">Cần xem lại (Chưa hiểu)</div><div class="bucket-body"><span class="bucket-empty">Chưa có mục nào</span></div></div>
-    <div class="bucket" data-bucket="open"><div class="bucket-label">Câu hỏi mở</div><div class="bucket-body"><span class="bucket-empty">Chưa có mục nào</span></div></div>
+    <div class="card">
+      <div class="card-title">Mẫu ghi chú của bạn — chạm ô để đặt mục đã chọn vào</div>
+      <div class="bucket" data-bucket="main"><div class="bucket-label">Ý chính</div><div class="bucket-body"><span class="bucket-empty">Chưa có mục nào</span></div></div>
+      <div class="bucket" data-bucket="review"><div class="bucket-label">Cần xem lại (Chưa hiểu)</div><div class="bucket-body"><span class="bucket-empty">Chưa có mục nào</span></div></div>
+      <div class="bucket" data-bucket="open"><div class="bucket-label">Câu hỏi mở</div><div class="bucket-body"><span class="bucket-empty">Chưa có mục nào</span></div></div>
+    </div>
   </div>
 
   <div class="btn-row">
@@ -45,8 +48,7 @@
       Hoàn tất ghi chú</button>
     <a class="btn ghost" href="index.html" style="text-decoration:none;">Huỷ, quay lại context</a>
   </div>
-</div>
-</div>
+</main>
 
 <div class="toast" id="toast"></div>
 
@@ -77,6 +79,13 @@ function renderPool() {
     const el = document.createElement('span');
     el.className = 'chip ' + it.type + (selectedId === it.id ? ' selected' : '');
     el.innerHTML = ICONS[it.type] + '<span>' + it.text + '</span>';
+    el.setAttribute('draggable', 'true');
+    el.addEventListener('dragstart', (e) => {
+      e.dataTransfer.setData('text/plain', it.id);
+      e.dataTransfer.effectAllowed = 'move';
+      el.classList.add('dragging');
+    });
+    el.addEventListener('dragend', () => el.classList.remove('dragging'));
     el.onclick = () => { selectedId = (selectedId === it.id ? null : it.id); renderPool(); toast(selectedId ? 'Đã chọn — giờ chạm vào một ô bên dưới' : ''); };
     pool.appendChild(el);
   });
@@ -106,14 +115,27 @@ function renderBuckets() {
   });
 }
 
+function placeItem(id, bucketKey) {
+  if (!id || !items.some(i => i.id === id)) return;
+  placed[id] = bucketKey;
+  selectedId = null;
+  renderPool();
+  renderBuckets();
+  updateFinishState();
+}
+
 document.querySelectorAll('.bucket').forEach(b => {
   b.addEventListener('click', () => {
-    if (!selectedId) { toast('Chọn một mục ở trên trước'); return; }
-    placed[selectedId] = b.dataset.bucket;
-    selectedId = null;
-    renderPool();
-    renderBuckets();
-    updateFinishState();
+    if (!selectedId) { toast('Chọn một mục ở trên, hoặc kéo thẳng vào đây'); return; }
+    placeItem(selectedId, b.dataset.bucket);
+  });
+  b.addEventListener('dragover', (e) => { e.preventDefault(); b.classList.add('drag-over'); });
+  b.addEventListener('dragleave', () => b.classList.remove('drag-over'));
+  b.addEventListener('drop', (e) => {
+    e.preventDefault();
+    b.classList.remove('drag-over');
+    const id = e.dataTransfer.getData('text/plain');
+    placeItem(id, b.dataset.bucket);
   });
 });
 

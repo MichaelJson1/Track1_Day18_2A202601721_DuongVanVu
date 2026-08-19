@@ -7,10 +7,10 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="page-shell">
-  <div class="topbar">
-    <div class="topbar-brand"><span class="dot"></span> Vlearn</div>
-    <div class="topbar-lesson">Bài 9 · Thiết kế trải nghiệm Human–AI</div>
+<header class="app-header">
+  <div class="header-inner container">
+    <div class="brand"><span class="dot"></span> Vlearn</div>
+    <div class="lesson-name">Bài 9 · Thiết kế trải nghiệm Human–AI</div>
     <div class="stepper">
       <div class="step done"><span class="num">✓</span> Ngữ cảnh</div>
       <div class="step-line done"></div>
@@ -19,28 +19,45 @@
       <div class="step"><span class="num">3</span> Kết quả</div>
     </div>
   </div>
-<div class="wrap">
-  <div class="crumbs" style="margin-top:20px;"><a href="index.html">
+</header>
+<main class="container page-content">
+  <div class="crumbs"><a href="index.html">
     <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
     Common context</a> / Option B</div>
   <div class="eyebrow">Critical interaction — Option B</div>
   <h1>AI gợi ý nhóm nội dung</h1>
   <p class="sub">AI gợi ý nhóm nội dung dựa trên highlight và ghi chú của bạn — bạn chọn phần muốn giữ. Chưa gì được lưu cho tới khi bạn xác nhận.</p>
 
-  <div id="groups"></div>
+  <div class="split-main-side">
+    <div class="main-col">
+      <div class="bulk-row">
+        <button class="ghost small" id="accept-all">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L7 17l-5-5"/><path d="M22 10L12 20l-2-2"/></svg>
+          Nhận tất cả gợi ý</button>
+      </div>
 
-  <button class="ghost small" id="add-manual">
-    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-    Thêm mục tự viết</button>
+      <div id="groups"></div>
 
-  <div class="btn-row">
-    <button class="primary" id="confirm-btn">
-      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-      Xác nhận lưu</button>
-    <a class="btn ghost" href="index.html" style="text-decoration:none;">Huỷ, quay lại context</a>
+      <button class="ghost small" id="add-manual">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Thêm mục tự viết</button>
+
+      <div class="btn-row">
+        <button class="primary" id="confirm-btn">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          Xác nhận lưu</button>
+        <a class="btn ghost" href="index.html" style="text-decoration:none;">Huỷ, quay lại context</a>
+      </div>
+    </div>
+
+    <aside class="side-col">
+      <h3>Tiến độ xử lý gợi ý</h3>
+      <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+      <div class="progress-caption" id="progress-caption">0/3 gợi ý đã xử lý</div>
+      <div class="side-tip">Gợi ý AI chỉ vào ghi chú khi bạn Nhận hoặc Sửa. Bỏ một gợi ý không xoá vĩnh viễn — vẫn Hoàn tác được trước khi bấm Xác nhận lưu.</div>
+    </aside>
   </div>
-</div>
-</div>
+</main>
 
 <div class="toast" id="toast"></div>
 
@@ -84,7 +101,20 @@ function render() {
   groups.forEach(g => {
     const s = state[g.id];
     const el = document.createElement('div');
-    el.className = 'suggestion-group' + (s.status === 'rejected' ? ' rejected' : '');
+
+    if (s.status === 'rejected') {
+      el.className = 'suggestion-group collapsed';
+      el.innerHTML = `
+        <span class="collapsed-title">${g.title}</span>
+        <button class="ghost small" data-undo="${g.id}" style="flex-shrink:0;">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+          Hoàn tác</button>
+      `;
+      wrap.appendChild(el);
+      return;
+    }
+
+    el.className = 'suggestion-group';
     el.innerHTML = `
       <span class="suggestion-badge">${ICON_SPARKLE} ${s.status === 'edited' ? 'GỢI Ý AI — ĐÃ SỬA' : s.status === 'accepted' ? 'GỢI Ý AI — ĐÃ NHẬN' : 'GỢI Ý AI'}</span>
       <div style="font-weight:600; margin-bottom:6px;">${g.title}${g.uncertain ? ' <span style="color:var(--warn); font-weight:400; font-size:12px;">· AI chưa chắc</span>' : ''}</div>
@@ -111,7 +141,8 @@ function render() {
   });
 
   wrap.querySelectorAll('[data-accept]').forEach(b => b.onclick = () => { state[b.dataset.accept].status = 'accepted'; render(); toast('Đã nhận gợi ý'); });
-  wrap.querySelectorAll('[data-reject]').forEach(b => b.onclick = () => { state[b.dataset.reject].status = 'rejected'; render(); toast('Đã bỏ gợi ý — sẽ không đưa vào ghi chú'); });
+  wrap.querySelectorAll('[data-reject]').forEach(b => b.onclick = () => { state[b.dataset.reject].status = 'rejected'; render(); toast('Đã bỏ gợi ý — có thể Hoàn tác bất cứ lúc nào'); });
+  wrap.querySelectorAll('[data-undo]').forEach(b => b.onclick = () => { state[b.dataset.undo].status = 'pending'; render(); toast('Đã khôi phục gợi ý'); });
   wrap.querySelectorAll('[data-edit]').forEach(b => b.onclick = () => { state[b.dataset.edit].editing = true; render(); });
   wrap.querySelectorAll('[data-cancel]').forEach(b => b.onclick = () => { state[b.dataset.cancel].editing = false; render(); });
   wrap.querySelectorAll('[data-save]').forEach(b => b.onclick = () => {
@@ -122,12 +153,31 @@ function render() {
     render();
     toast('Đã lưu chỉnh sửa của bạn');
   });
+
+  updateProgress();
+}
+
+function updateProgress() {
+  const total = groups.length;
+  const done = groups.filter(g => state[g.id].status !== 'pending').length;
+  const pct = total === 0 ? 0 : Math.round((done / total) * 100);
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-caption').textContent = `${done}/${total} gợi ý đã xử lý`;
 }
 
 document.getElementById('add-manual').addEventListener('click', () => {
   manualCount++;
   manualItems['m' + manualCount] = '';
   render();
+});
+
+document.getElementById('accept-all').addEventListener('click', () => {
+  let count = 0;
+  groups.forEach(g => {
+    if (state[g.id].status === 'pending') { state[g.id].status = 'accepted'; count++; }
+  });
+  render();
+  toast(count > 0 ? `Đã nhận ${count} gợi ý — vẫn có thể Sửa hoặc Bỏ từng cái` : 'Không còn gợi ý nào đang chờ');
 });
 
 function toast(msg) {
